@@ -26,16 +26,18 @@ First boot seeds ~3,200 poles / 48 DTs (cold start can take ~60–90s while the 
 ## Public URL / demo video
 
 - **GitHub:** https://github.com/shwetgaur/propel-ai-fault-localization
-- **Live URL:** https://51fac69aa41acb.lhr.life
-  - Tunnel to local Docker on `:8080`. Keep `docker compose up` running.
+- **Live URL:** https://51fac69aa41acb.lhr.life *(temporary tunnel — keep Docker running)*
+- **Render (stable):** use the button below after connecting your GitHub account
+  - [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/shwetgaur/propel-ai-fault-localization)
+  - Or Dashboard → **New** → **Blueprint** → select `shwetgaur/propel-ai-fault-localization`
 - **Local:** http://localhost:8080
 - **Demo video:** Record a 5-minute Loom/YouTube unlisted walkthrough before emailing (gate G6).
 
 ### Hosting notes
 
-- **Hugging Face Docker Spaces require a PRO plan** (402 on free accounts). Packaging is ready (`Dockerfile` + `SPACE_README.md`) if you upgrade.
-- **Free stable host:** connect this repo to [Render](https://render.com) — `render.yaml` is already in the repo (Docker web service).
-- Single-image Dockerfile serves API + UI on port **7860** for PaaS hosts.
+- **Hugging Face Docker Spaces require PRO** — packaging is ready if you upgrade.
+- **Render free tier:** `render.yaml` is tuned for free Docker (ephemeral SQLite under `/tmp`). First build can take 5–10 minutes; free services sleep when idle.
+- Single-image `Dockerfile` serves API + UI on port **7860**.
 
 ## Docs
 
