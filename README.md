@@ -26,26 +26,18 @@ First boot seeds ~3,200 poles / 48 DTs (cold start can take ~60–90s while the 
 ## Public URL / demo video
 
 - **GitHub:** https://github.com/shwetgaur/propel-ai-fault-localization
-- **Live URL (Hugging Face Space):** https://huggingface.co/spaces/shwetgaur/propel-fault-localization
-  - Docker Space on port 7860. First boot seeds the network (~1–2 min on free CPU).
-- **Local:** http://localhost:8080 after `docker compose up --build`
-- **Demo video:** Record a 5-minute Loom/YouTube unlisted walkthrough of the demo path above before emailing (gate G6 insurance).
+- **Live URL:** https://51fac69aa41acb.lhr.life
+  - Tunnel to local Docker on `:8080`. Keep `docker compose up` running.
+- **Local:** http://localhost:8080
+- **Demo video:** Record a 5-minute Loom/YouTube unlisted walkthrough before emailing (gate G6).
 
-### Deploy / refresh the Hugging Face Space
+### Hosting notes
 
-Needs a Hugging Face token with **Write** permission:
+- **Hugging Face Docker Spaces require a PRO plan** (402 on free accounts). Packaging is ready (`Dockerfile` + `SPACE_README.md`) if you upgrade.
+- **Free stable host:** connect this repo to [Render](https://render.com) — `render.yaml` is already in the repo (Docker web service).
+- Single-image Dockerfile serves API + UI on port **7860** for PaaS hosts.
 
-```bash
-hf auth login
-hf repos create shwetgaur/propel-fault-localization --type space --space-sdk docker --public --exist-ok
-# from repo root, after copying SPACE_README.md → README.md for the Space upload:
-hf upload shwetgaur/propel-fault-localization . --repo-type space `
-  --exclude ".git/*" --exclude "backend/.venv/*" --exclude "frontend/node_modules/*" --exclude "**/__pycache__/*"
-```
-
-Or use the root `Dockerfile` (serves UI + API on **7860**).
-
-> Free Spaces sleep when idle; wait for wake on first open.## Docs
+## Docs
 
 | File | Purpose |
 |------|---------|
@@ -58,7 +50,7 @@ Or use the root `Dockerfile` (serves UI + API on **7860**).
 
 - **Backend:** FastAPI + SQLAlchemy + SQLite
 - **Frontend:** React + Vite + Leaflet (OSM tiles, no API key)
-- **Packaging:** Docker Compose, nginx reverse-proxy to API
+- **Packaging:** Docker Compose (local) or single Dockerfile (PaaS / HF PRO)
 
 ## API
 
