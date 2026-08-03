@@ -4,11 +4,16 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from .api import router
 from .config import settings
 from .db import SessionLocal, init_db
 from .seed import generate_and_seed
+
+
+STATIC_DIR = Path(os.environ.get("STATIC_DIR", "")).resolve() if os.environ.get("STATIC_DIR") else None
 
 
 def _ensure_sqlite_dir() -> None:
@@ -30,7 +35,8 @@ async def lifespan(_: FastAPI):
 
             count = db.query(Pole).count()
             if count == 0:
-                generate_and_seed(db)
+                poles_target = int(os.environ.get("SEED_POLES", "3200"))
+                generate_and_seed(db, poles_target=poles_target)
         finally:
             db.close()
     yield
@@ -50,10 +56,35 @@ app.add_middleware(
 app.include_router(router, prefix="/api")
 
 
-@app.get("/")
-def root():
+@app.get("/api")
+def api_root():
     return {
         "service": "KSPDB Fault Localization",
         "docs": "/docs",
         "health": "/api/health",
     }
+
+
+if STATIC_DIR and STATIC_DIR.exists():
+    assets = STATIC_DIR / "assets"
+    if assets.exists():
+        app.mount("/assets", StaticFiles(directory=assets), name="assets")
+
+    @app.get("/{full_path:path}")
+    def spa(full_path: str = ""):
+        # Keep API/docs out of SPA fallback
+        if full_path.startswith(("api/", "docs", "openapi.json", "redoc")):
+            return {"detail": "Not found"}
+        candidate = STATIC_DIR / full_path
+        if full_path and candidate.is_file():
+            return FileResponse(candidate)
+        return FileResponse(STATIC_DIR / "index.html")
+else:
+
+    @app.get("/")
+    def root():
+        return {
+            "service": "KSPDB Fault Localization",
+            "docs": "/docs",
+            "health": "/api/health",
+        }

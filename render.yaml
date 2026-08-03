@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: propel-fault-localization
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:////data/faultloc.db
+      - key: SEED_ON_STARTUP
+        value: "true"
+      - key: SEED_POLES
+        value: "2200"
+      - key: STATIC_DIR
+        value: /app/static
+      - key: CORS_ORIGINS
+        value: "*"
+    disk:
+      name: faultloc-data
+      mountPath: /data
+      sizeGB: 1

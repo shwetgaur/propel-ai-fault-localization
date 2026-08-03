@@ -26,13 +26,26 @@ First boot seeds ~3,200 poles / 48 DTs (cold start can take ~60–90s while the 
 ## Public URL / demo video
 
 - **GitHub:** https://github.com/shwetgaur/propel-ai-fault-localization
-- **Live URL:** https://181eac6da7c643.lhr.life
-  - Reverse tunnel to local Docker on `:8080` (localhost.run). Keep `docker compose up` **and** the SSH tunnel running while reviewers need access — if either stops, the page shows “no tunnel”.
-  - If down: restart Compose + tunnel (URL will change), or deploy the same stack to Render/Railway/Fly for a stable URL (see `DEPLOYMENT.md`).
+- **Live URL (Hugging Face Space):** https://huggingface.co/spaces/shwetgaur/propel-fault-localization
+  - Docker Space on port 7860. First boot seeds the network (~1–2 min on free CPU).
+- **Local:** http://localhost:8080 after `docker compose up --build`
 - **Demo video:** Record a 5-minute Loom/YouTube unlisted walkthrough of the demo path above before emailing (gate G6 insurance).
 
-> These free tunnels drop often. Prefer a real host deploy for submission day, and keep the demo video as backup.
-## Docs
+### Deploy / refresh the Hugging Face Space
+
+Needs a Hugging Face token with **Write** permission:
+
+```bash
+hf auth login
+hf repos create shwetgaur/propel-fault-localization --type space --space-sdk docker --public --exist-ok
+# from repo root, after copying SPACE_README.md → README.md for the Space upload:
+hf upload shwetgaur/propel-fault-localization . --repo-type space `
+  --exclude ".git/*" --exclude "backend/.venv/*" --exclude "frontend/node_modules/*" --exclude "**/__pycache__/*"
+```
+
+Or use the root `Dockerfile` (serves UI + API on **7860**).
+
+> Free Spaces sleep when idle; wait for wake on first open.## Docs
 
 | File | Purpose |
 |------|---------|
