@@ -26,13 +26,12 @@ First boot seeds ~3,200 poles / 48 DTs (cold start can take ~60–90s while the 
 ## Public URL / demo video
 
 - **GitHub:** https://github.com/shwetgaur/propel-ai-fault-localization
-- **Live URL:** https://cb01849b5ad29b.lhr.life
-  - Reverse tunnel to local Docker on `:8080` (localhost.run). Keep `docker compose up` running while reviewers need access.
-  - If down: restart Compose + tunnel, or deploy the same stack to Render/Railway/Fly (see `DEPLOYMENT.md`).
+- **Live URL:** https://181eac6da7c643.lhr.life
+  - Reverse tunnel to local Docker on `:8080` (localhost.run). Keep `docker compose up` **and** the SSH tunnel running while reviewers need access — if either stops, the page shows “no tunnel”.
+  - If down: restart Compose + tunnel (URL will change), or deploy the same stack to Render/Railway/Fly for a stable URL (see `DEPLOYMENT.md`).
 - **Demo video:** Record a 5-minute Loom/YouTube unlisted walkthrough of the demo path above before emailing (gate G6 insurance).
 
-> Tunnel/free-tier reconnects are possible — wait ~30s or use the demo video.
-
+> These free tunnels drop often. Prefer a real host deploy for submission day, and keep the demo video as backup.
 ## Docs
 
 | File | Purpose |
