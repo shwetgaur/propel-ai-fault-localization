@@ -3,21 +3,21 @@ services:
     name: propel-fault-localization
     runtime: docker
     plan: free
+    region: oregon
+    branch: master
+    repo: https://github.com/shwetgaur/propel-ai-fault-localization
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /api/health
+    autoDeploy: true
     envVars:
       - key: DATABASE_URL
-        value: sqlite:////data/faultloc.db
+        value: sqlite:////tmp/faultloc.db
       - key: SEED_ON_STARTUP
         value: "true"
       - key: SEED_POLES
-        value: "2200"
+        value: "1800"
       - key: STATIC_DIR
         value: /app/static
       - key: CORS_ORIGINS
         value: "*"
-    disk:
-      name: faultloc-data
-      mountPath: /data
-      sizeGB: 1
