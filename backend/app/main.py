@@ -2,7 +2,7 @@ import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -70,13 +70,17 @@ if STATIC_DIR and STATIC_DIR.exists():
     if assets.exists():
         app.mount("/assets", StaticFiles(directory=assets), name="assets")
 
+    @app.get("/")
+    def spa_root():
+        return FileResponse(STATIC_DIR / "index.html")
+
     @app.get("/{full_path:path}")
-    def spa(full_path: str = ""):
-        # Keep API/docs out of SPA fallback
+    def spa(full_path: str):
+        # Keep API/docs out of SPA fallback (router already owns /api/*)
         if full_path.startswith(("api/", "docs", "openapi.json", "redoc")):
-            return {"detail": "Not found"}
+            raise HTTPException(status_code=404, detail="Not found")
         candidate = STATIC_DIR / full_path
-        if full_path and candidate.is_file():
+        if candidate.is_file():
             return FileResponse(candidate)
         return FileResponse(STATIC_DIR / "index.html")
 else:
